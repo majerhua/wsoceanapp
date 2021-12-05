@@ -37,7 +37,7 @@ getContact = (req, res) => {
   let { idUsuario } = req.query
 
   con.query(
-    `SELECT *FROM contacto WHERE idUsuario = '${idUsuario}'`,
+    `SELECT *FROM contacto WHERE id_usuario = '${idUsuario}'`,
     function (err, result, field) {
         if (err) return res.status(500).send({ message: err.message, code: 0 })
         return res.status(200).json({message:`Lista de contactos del usuario con id: ${idUsuario}`,code: 1,contactos: result})
