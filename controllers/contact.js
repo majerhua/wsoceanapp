@@ -19,7 +19,7 @@ registerContact = (req,res)=>{
       `SELECT *FROM contacto WHERE id_usuario = ${idUsuario}`,
       function (err, result, field) {
           if (err) return res.status(500).send({ message: err.message, code: 0 })
-          if(result && result.length <= 3){
+          if(result && result.length < 3){
             con.query(
               `INSERT INTO contacto(id_usuario,nombre,celular) VALUES('${idUsuario}','${nombre}','${celular}')`,
               function (err, result, field) {
