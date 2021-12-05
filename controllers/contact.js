@@ -24,7 +24,7 @@ registerContact = (req,res)=>{
               `INSERT INTO contacto(id_usuario,nombre,celular) VALUES('${idUsuario}','${nombre}','${celular}')`,
               function (err, result, field) {
                 if (err) return res.status(500).send({ message: err.message, code: 0 })
-                res.status(200).json({message:'Se registro contacto correctamente',code: 1})
+                return res.status(200).json({message:'Se registro contacto correctamente',code: 1})
               }
             )
           }
