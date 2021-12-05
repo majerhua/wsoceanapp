@@ -24,6 +24,7 @@ app.post('/api/usuario/register', userCtrl.registerUser);
 
 app.post('/api/contacto/delete', contactCtrl.deleteContact);
 app.post('/api/contacto/register', contactCtrl.registerContact);
+app.get('/api/contacto/get', contactCtrl.getContact);
 
 
 app.listen(port, () => {
