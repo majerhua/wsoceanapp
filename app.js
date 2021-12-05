@@ -22,8 +22,8 @@ app.use((req, res, next) => {
 app.post('/api/usuario/login', userCtrl.validateUser);
 app.post('/api/usuario/register', userCtrl.registerUser);
 
-app.post('/api/contact/delete', userCtrl.deleteContact);
-app.post('/api/contact/register', userCtrl.registerContact);
+app.post('/api/contacto/delete', userCtrl.deleteContact);
+app.post('/api/contacto/register', userCtrl.registerContact);
 
 
 app.listen(port, () => {
