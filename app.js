@@ -6,6 +6,7 @@ app.use(express.json({ limit: '20mb' }))
 app.use(express.urlencoded({ extended: false, limit: '20mb' }))
 
 const userCtrl = require('./controllers/user')
+const contactCtrl = require('./controllers/contact')
 
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*')
@@ -20,6 +21,9 @@ app.use((req, res, next) => {
 
 app.post('/api/usuario/login', userCtrl.validateUser);
 app.post('/api/usuario/register', userCtrl.registerUser);
+
+app.post('/api/contact/delete', userCtrl.deleteContact);
+app.post('/api/contact/register', userCtrl.registerContact);
 
 
 app.listen(port, () => {
