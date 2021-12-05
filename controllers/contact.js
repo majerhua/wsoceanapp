@@ -28,7 +28,7 @@ registerContact = (req,res)=>{
               }
             )
           }
-          return res.status(200).json({message:'No se pudo registrar el usuario',code: 0})
+          else return res.status(200).json({message:'No se pudo registrar el usuario',code: 0})
       }
     )
 }
