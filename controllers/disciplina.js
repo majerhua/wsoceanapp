@@ -25,9 +25,10 @@ registrarDisciplina = (req,res)=>{
 }
 
 listarDisciplina = (req, res) => {
+  let {cliente} = req.query;
 
   con.query(
-    `SELECT *FROM appgimnasio_disciplina WHERE Estado = 1`,
+    `SELECT *FROM appgimnasio_disciplina WHERE Estado = 1 AND cliente = ${cliente}`,
     function (err, result, field) {
         if (err) return res.status(500).send({ message: err.message, code: 0 })
         return res.status(200).json({message:`lista de disciplinas`,code: 1,disciplinas: result})
