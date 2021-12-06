@@ -2,7 +2,9 @@ const con = require('../conexion/conexion')
 
 validateUser = (req, res) => {
   let { username, password } = req.query
-
+  username = username.toLowerCase()
+  password = password.toLowerCase()
+  
   con.query(
     `SELECT *FROM appgimnasio_cliente WHERE username = '${username}' AND password = '${password}'`,
     function (err, result, field) {
