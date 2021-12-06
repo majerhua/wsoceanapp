@@ -6,7 +6,8 @@ app.use(express.json({ limit: '20mb' }))
 app.use(express.urlencoded({ extended: false, limit: '20mb' }))
 
 const userCtrl = require('./controllers/user')
-const contactCtrl = require('./controllers/contact')
+const reservaCtrl = require('./controllers/reserva')
+const disciplinaCtrl = require('./controllers/disciplina')
 
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*')
@@ -20,12 +21,14 @@ app.use((req, res, next) => {
 })
 
 app.post('/api/usuario/login', userCtrl.validateUser);
-app.post('/api/usuario/register', userCtrl.registerUser);
 
-app.post('/api/contacto/delete', contactCtrl.deleteContact);
-app.post('/api/contacto/register', contactCtrl.registerContact);
-app.get('/api/contacto/get', contactCtrl.getContact);
+app.post('/api/reserva/anular', reservaCtrl.anularReserva);
+app.post('/api/reserva/registrar', reservaCtrl.registrarReserva);
+app.get('/api/reserva/listar', reservaCtrl.listarReserva);
 
+app.post('/api/disciplina/anular', disciplinaCtrl.anularDisciplina);
+app.post('/api/disciplina/registrar', disciplinaCtrl.registrarDisciplina);
+app.get('/api/disciplina/listar', disciplinaCtrl.listarDisciplina);
 
 app.listen(port, () => {
   console.log(`Api rest corriendo en http://localhost:${port}`)
