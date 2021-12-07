@@ -31,5 +31,5 @@ app.post('/api/disciplina/registrar', disciplinaCtrl.registrarDisciplina);
 app.get('/api/disciplina/listar', disciplinaCtrl.listarDisciplina);
 
 app.listen(port, () => {
-  console.log(`Api rest corriendo en http://localhost:${port}`)
+  console.log(`Api rest  en http://localhost:${port}`)
 })
