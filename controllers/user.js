@@ -21,7 +21,7 @@ const registerFile = (req,res)=>{
 
   console.log("ID =>",idUsuario)
 
-  let url = `https://wsporky.herokuapp.com/public/${req.file.filename}`
+  let url = `https://wsappgimnasio.herokuapp.com/public/${req.file.filename}`
   con.query(
     `UPDATE  appgimnasio_cliente SET url = '${url}' WHERE id = ${idUsuario}`,
     function (err, result, field) {
