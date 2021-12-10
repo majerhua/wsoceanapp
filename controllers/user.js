@@ -17,11 +17,13 @@ const validateUser = (req, res) => {
 
 const registerFile = (req,res)=>{
 
-  let { id } = req.body
+  let { idUsuario } = req.body
+
+  console.log("ID =>",idUsuario)
 
   let url = `https://wsporky.herokuapp.com/public/${req.file.filename}`
   con.query(
-    `UPDATE  appgimnasio_cliente SET url = '${url}' WHERE id = ${id}`,
+    `UPDATE  appgimnasio_cliente SET url = '${url}' WHERE id = ${idUsuario}`,
     function (err, result, field) {
         if (err) return res.status(500).send({ message: err.message, code: 0 })
         return res.status(200).json({message:'Se actualizo imagen correctamente',code: 1})

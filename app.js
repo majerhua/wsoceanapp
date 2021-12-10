@@ -9,7 +9,7 @@ const userCtrl = require('./controllers/user')
 const reservaCtrl = require('./controllers/reserva')
 const disciplinaCtrl = require('./controllers/disciplina')
 const upload = require('./libs/storage')
-
+app.use('/public', express.static(`${__dirname}/storage/imgs`))
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*')
   res.header(
