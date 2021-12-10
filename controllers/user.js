@@ -1,6 +1,6 @@
 const con = require('../conexion/conexion')
 
-validateUser = (req, res) => {
+const validateUser = (req, res) => {
   let { username, password } = req.query
   username = username.toLowerCase()
   password = password.toLowerCase()
@@ -15,7 +15,21 @@ validateUser = (req, res) => {
   )
 }
 
+const registerFile = (req,res)=>{
+
+  let { id } = req.body
+
+  let url = `https://wsporky.herokuapp.com/public/${req.file.filename}`
+  con.query(
+    `UPDATE  appgimnasio_cliente SET url = '${url}' WHERE id = ${id}`,
+    function (err, result, field) {
+        if (err) return res.status(500).send({ message: err.message, code: 0 })
+        return res.status(200).json({message:'Se actualizo imagen correctamente',code: 1})
+    }
+  )
+}
 
 module.exports = {
-  validateUser
+  validateUser,
+  registerFile
 }

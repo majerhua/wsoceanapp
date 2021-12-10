@@ -8,6 +8,7 @@ app.use(express.urlencoded({ extended: false, limit: '20mb' }))
 const userCtrl = require('./controllers/user')
 const reservaCtrl = require('./controllers/reserva')
 const disciplinaCtrl = require('./controllers/disciplina')
+const upload = require('./libs/storage')
 
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*')
@@ -20,6 +21,8 @@ app.use((req, res, next) => {
   next()
 })
 
+
+
 app.post('/api/usuario/login', userCtrl.validateUser);
 
 app.post('/api/reserva/anular', reservaCtrl.anularReserva);
@@ -29,6 +32,11 @@ app.get('/api/reserva/listar', reservaCtrl.listarReserva);
 app.post('/api/disciplina/anular', disciplinaCtrl.anularDisciplina);
 app.post('/api/disciplina/registrar', disciplinaCtrl.registrarDisciplina);
 app.get('/api/disciplina/listar', disciplinaCtrl.listarDisciplina);
+
+app.post('/api/imagen/registrar',
+  upload.single('image'),
+  userCtrl.registerFile
+)
 
 app.listen(port, () => {
   console.log(`Api rest  en http://localhost:${port}`)
