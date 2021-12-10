@@ -9,7 +9,7 @@ const validateUser = (req, res) => {
     `SELECT *FROM appgimnasio_cliente WHERE username = '${username}' AND password = '${password}'`,
     function (err, result, field) {
         if (err) return res.status(500).send({ message: err.message, code: 0 })
-        if(result && result.length > 0) return res.status(200).json({message:'El usuario existe',code: 1,nombre: result[0].NombreCompleto})
+        if(result && result.length > 0) return res.status(200).json({message:'El usuario existe',code: 1,nombre: result[0].NombreCompleto,idUsuario:result[0].id})
         return res.status(200).json({message:'El usuario no existe',code: 0})
     }
   )
