@@ -5,7 +5,8 @@ const port = process.env.PORT || 4000
 app.use(express.json({ limit: '20mb' }))
 app.use(express.urlencoded({ extended: false, limit: '20mb' }))
 
-const userCtrl = require('./controllers/user')
+const userCtrl = require('./controllers/user');
+const embarcacionCtrl = require('./controllers/embarcacion');
 
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*')
@@ -21,7 +22,7 @@ app.use((req, res, next) => {
 
 
 app.post('/api/usuario/login', userCtrl.validateUser);
-
+app.post('/api/embarcacion', embarcacionCtrl.register);
 
 app.listen(port, () => {
   console.log(`Api rest  en http://localhost:${port}`)
