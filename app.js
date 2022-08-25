@@ -1,12 +1,15 @@
 const express = require('express')
+const embarcacion = require('./routes/embarcacion');
+const lance = require('./routes/lance');
+const user = require('./routes/user');
+
+const router = express.Router();
 const app = express()
 const port = process.env.PORT || 4000
 
+
 app.use(express.json({ limit: '20mb' }))
 app.use(express.urlencoded({ extended: false, limit: '20mb' }))
-
-const userCtrl = require('./controllers/user');
-const embarcacionCtrl = require('./controllers/embarcacion');
 
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*')
@@ -17,12 +20,13 @@ app.use((req, res, next) => {
   res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE')
   res.header('Allow', 'GET, POST, OPTIONS, PUT, DELETE')
   next()
-})
+});
 
 
 
-app.post('/api/usuario/login', userCtrl.validateUser);
-app.post('/api/embarcacion', embarcacionCtrl.register);
+app.use('/api/user', user);
+app.use('/api/embarcacion', embarcacion);
+app.use('/api/lance', lance);
 
 app.listen(port, () => {
   console.log(`Api rest  en http://localhost:${port}`)
