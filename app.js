@@ -1,6 +1,7 @@
 const express = require('express')
-const embarcacion = require('./routes/embarcacion');
+const zarpe = require('./routes/zarpe');
 const lance = require('./routes/lance');
+const embarcacion = require('./routes/embarcacion');
 const user = require('./routes/user');
 
 const router = express.Router();
@@ -26,6 +27,7 @@ app.use((req, res, next) => {
 
 app.use('/api/user', user);
 app.use('/api/embarcacion', embarcacion);
+app.use('/api/zarpe', zarpe);
 app.use('/api/lance', lance);
 
 app.listen(port, () => {

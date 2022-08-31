@@ -3,6 +3,6 @@ const embarcacionCtrl = require('../controllers/embarcacion');
 
 const router = express.Router();
 
-router.post('/', embarcacionCtrl.register);
+router.get('/', embarcacionCtrl.get);
 
 module.exports = router;
