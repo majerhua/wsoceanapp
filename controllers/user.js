@@ -15,6 +15,38 @@ const validateUser = (req, res) => {
   )
 }
 
+const get = (req, res) => {
+  
+  con.query(
+    `SELECT *from user`,
+    function (err, result, field) {
+      if (err) return res.status(500).send({ message: err.message, code: 0 })
+      return res.status(200).json(result)
+    }
+  );
+}
+
+const register = (req, res) => {
+
+  let { username,
+        dni,
+        nombre,
+        apellidos,
+        password,
+        rol} = req.body
+
+  con.query(
+    `INSERT INTO user(username,dni,nombre,apellidos,password,rol) VALUES('${username}', '${dni}', '${nombre}, '${apellidos}', '${password}', '${rol}')`,
+    function (err, result, field) {
+      if (err) return res.status(500).send({ message: err.message, code: 0 })
+      return res.status(200).json({message:'Se registro correctamente',code: 1})
+    }
+  );
+}
+
+
 module.exports = {
-  validateUser
+  validateUser,
+  get,
+  register
 }
