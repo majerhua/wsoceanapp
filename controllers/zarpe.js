@@ -22,8 +22,11 @@ const register = (req, res) => {
 
 
 const get = (req, res) => {
+  let {
+    zarpe_id
+  } = req.query;
   con.query(
-    `SELECT z.id, CONCAT(e.nombre,'-',z.id) nombre, e.matricula  FROM zarpe z INNER JOIN embarcacion e ON e.id = z.embarcacion_id`,
+    `SELECT z.id, e.nombre nombre, e.matricula  FROM zarpe z INNER JOIN embarcacion e ON e.id = z.embarcacion_id WHERE z.id = ${zarpe_id}`,
     function (err, result, field) {
       if (err) return res.status(500).send({ message: err.message, code: 0 })
       return res.status(200).json(result)
