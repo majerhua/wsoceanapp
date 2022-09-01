@@ -14,7 +14,8 @@ const register = (req, res) => {
     `INSERT INTO zarpe(embarcacion_id, puertoZarpe, fechaZarpe, horaZarpe, puertoArribo, objetivo, comentario) VALUES('${embarcacion_id}', '${puertoZarpe}', '${fechaZarpe}', '${horaZarpe}', '${puertoArribo}', '${objetivo}', '${comentario}')`,
     function (err, result, field) {
         if (err) return res.status(500).send({ message: err.message, code: 0 })
-        return res.status(200).json({message:'Se registro correctamente',code: 1})
+        return res.status(200).json({message:'Se registro correctamente',code: 1, id: result.insertId});
+        
     }
   )
 }
