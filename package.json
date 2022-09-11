@@ -10,8 +10,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "aws-sdk": "^2.1213.0",
     "express": "^4.17.1",
-    "multer": "^1.4.2",
+    "express-fileupload": "^1.4.0",
+    "multer": "^1.4.4",
     "mysql": "^2.18.1",
     "node-fetch": "^2.6.1",
     "uid": "^2.0.0"
