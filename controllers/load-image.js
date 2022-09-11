@@ -30,10 +30,15 @@ const load = async (req, res) => {
     con.query(
       `INSERT INTO lance_imagen(lance_id, url) VALUES(${lance_id}, '${url}')`,
       function (err, result, field) {
-        if (err) reject(err)
-        resolve({message:'Se registro correctamente',code: 1})
+        if (err) reject({ message: err.message, code: 0 })
+        const id = result.insertId;
+      con.query(
+        `SELECT * FROM lance_imagen WHERE id = ${id}`,
+          function (err, result, field) {
+         if (err) reject({ message: err.message, code: 0 })
+          resolve({message:'Se registro correctamente',code: 1,data: result[0]})
+        })
       });
-
   })
    return res.status(200).json(response)
 }
