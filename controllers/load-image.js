@@ -54,9 +54,19 @@ const galeriaFotos = (req,res)=> {
   )
 }
 
-
+const deleteFotos = (req,res)=> {
+  const {id} = req.query
+  con.query(
+    `DELETE FROM lance_imagen WHERE id = ${id}`,
+    function (err, result, field) {
+      if (err) return res.status(500).send({ message: err.message, code: 0 })
+      return res.status(200).json(result)
+    }
+  )
+}
 
 module.exports = {
   load,
-  galeriaFotos
+  galeriaFotos,
+  deleteFotos
 }
