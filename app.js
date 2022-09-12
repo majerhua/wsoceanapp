@@ -44,6 +44,7 @@ app.use('/api/lance', lance);
 app.post('/api/load-image',upload,loadImageCtrl.load);
 app.get('/api/galeria-fotos',upload,loadImageCtrl.galeriaFotos);
 app.delete('/api/delete-image',upload,loadImageCtrl.deleteFotos);
+app.get('/api/galeria-fotos-all',upload,loadImageCtrl.galeriaFotosAll);
 
 app.listen(port, () => {
   console.log(`Api rest  en http://localhost:${port}`)

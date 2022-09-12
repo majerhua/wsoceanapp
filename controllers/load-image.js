@@ -54,6 +54,18 @@ const galeriaFotos = (req,res)=> {
   )
 }
 
+
+const galeriaFotosAll = (req,res)=> {
+  
+  con.query(
+    `SELECT * FROM lance_imagen ORDER BY id DESC`,
+    function (err, result, field) {
+      if (err) return res.status(500).send({ message: err.message, code: 0 })
+      return res.status(200).json(result)
+    }
+  )
+}
+
 const deleteFotos = (req,res)=> {
   const {id} = req.query
   con.query(
@@ -68,5 +80,6 @@ const deleteFotos = (req,res)=> {
 module.exports = {
   load,
   galeriaFotos,
-  deleteFotos
+  deleteFotos,
+  galeriaFotosAll
 }
