@@ -60,7 +60,7 @@ const deleteFotos = (req,res)=> {
     `DELETE FROM lance_imagen WHERE id = ${id}`,
     function (err, result, field) {
       if (err) return res.status(500).send({ message: err.message, code: 0 })
-      return res.status(200).json(result)
+      return res.status(200).json({message:'Se elimino correctamente',code: 1})
     }
   )
 }
