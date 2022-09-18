@@ -20,6 +20,20 @@ const register = (req, res) => {
   )
 }
 
+const getByZarpeId = (req, res) => {
+  
+  const {zarpe_id} = req.query;
+
+  con.query(
+    `SELECT *FROM lance WHERE = zarpe_id=${zarpe_id}`,
+    function (err, result, field) {
+      if (err) return res.status(500).send({ message: err.message, code: 0 })
+      return res.status(200).json(result)
+    }
+  )
+} 
+
 module.exports = {
-  register
+  register,
+  getByZarpeId
 }
