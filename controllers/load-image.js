@@ -13,6 +13,7 @@ const load = async (req, res) => {
 
   const { file} = req
   const {lance_id} = req.body
+  const {user_id} = req.body
 
   const typeImage = file.originalname.split('.')[1];
 
@@ -28,7 +29,7 @@ const load = async (req, res) => {
 
   const response = await new Promise((resolve, reject) => {
     con.query(
-      `INSERT INTO lance_imagen(lance_id, url) VALUES(${lance_id}, '${url}')`,
+      `INSERT INTO lance_imagen(lance_id, url, user_id) VALUES(${lance_id}, '${url}', ${user_id})`,
       function (err, result, field) {
         if (err) reject({ message: err.message, code: 0 })
         const id = result.insertId;
