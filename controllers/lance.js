@@ -3,7 +3,6 @@ const uid =  require('uid');
 
 const register = (req, res) => {
   let { 
-    numeroLance,
     fechaLance,
     horaLance,
     latitud,
@@ -11,11 +10,23 @@ const register = (req, res) => {
     rumbo,
     zarpe_id
    } = req.query
-  con.query(
-    `INSERT INTO lance(numeroLance, fechaLance, horaLance, latitud, longitud, rumbo, zarpe_id, cala_id) VALUES('${numeroLance}', '${fechaLance}', '${horaLance}', '${latitud}', '${longitud}', '${rumbo}', ${zarpe_id}, '${uid.uid(8)}')`,
+
+   con.query(
+    `SELECT *FROM lance WHERE zarpe_id=${zarpe_id} order by id desc`,
     function (err, result, field) {
-        if (err) return res.status(500).send({ message: err.message, code: 0 })
-        return res.status(200).json({message:'Se registro correctamente',code: 1, id: result.insertId})
+      let numeroLance = 1;
+      if(result.length > 0) {
+        const ultimoLance = result[0];
+        numeroLance = ultimoLance.numeroLance;
+
+        con.query(
+          `INSERT INTO lance(numeroLance, fechaLance, horaLance, latitud, longitud, rumbo, zarpe_id, cala_id) VALUES('${numeroLance}', '${fechaLance}', '${horaLance}', '${latitud}', '${longitud}', '${rumbo}', ${zarpe_id}, '${uid.uid(8)}')`,
+          function (err, result, field) {
+              if (err) return res.status(500).send({ message: err.message, code: 0 })
+              return res.status(200).json({message:'Se registro correctamente',code: 1, id: result.insertId})
+          }
+        );
+      }
     }
   )
 }
