@@ -34,7 +34,22 @@ const get = (req, res) => {
   )
 }
 
+const close = (req, res) => {
+  let {
+    zarpe_id
+  } = req.query;
+  con.query(
+    `UPDATE FROM zarpe SET estado = 0 WHERE id = ${zarpe_id}`,
+    function (err, result, field) {
+      if (err) return res.status(500).send({ message: err.message, code: 0 })
+      return res.status(200).json({message:'Se cerro el zarpe correctamente',code: 1})
+    }
+  )
+}
+
+
 module.exports = {
   register,
-  get
+  get,
+  close
 }
