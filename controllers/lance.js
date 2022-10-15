@@ -17,7 +17,7 @@ const register = (req, res) => {
       let numeroLance = 1;
       if(result.length > 0) {
         const ultimoLance = result[0];
-        numeroLance = ultimoLance.numeroLance;
+        numeroLance = parseInt(ultimoLance.numeroLance) + 1;
 
         con.query(
           `INSERT INTO lance(numeroLance, fechaLance, horaLance, latitud, longitud, rumbo, zarpe_id, cala_id) VALUES('${numeroLance}', '${fechaLance}', '${horaLance}', '${latitud}', '${longitud}', '${rumbo}', ${zarpe_id}, '${uid.uid(8)}')`,
