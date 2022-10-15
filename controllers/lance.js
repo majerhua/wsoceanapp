@@ -18,15 +18,14 @@ const register = (req, res) => {
       if(result.length > 0) {
         const ultimoLance = result[0];
         numeroLance = parseInt(ultimoLance.numeroLance) + 1;
-
-        con.query(
-          `INSERT INTO lance(numeroLance, fechaLance, horaLance, latitud, longitud, rumbo, zarpe_id, cala_id) VALUES('${numeroLance}', '${fechaLance}', '${horaLance}', '${latitud}', '${longitud}', '${rumbo}', ${zarpe_id}, '${uid.uid(8)}')`,
-          function (err, result, field) {
-              if (err) return res.status(500).send({ message: err.message, code: 0 })
-              return res.status(200).json({message:'Se registro correctamente',code: 1, id: result.insertId})
-          }
-        );
       }
+      con.query(
+        `INSERT INTO lance(numeroLance, fechaLance, horaLance, latitud, longitud, rumbo, zarpe_id, cala_id) VALUES('${numeroLance}', '${fechaLance}', '${horaLance}', '${latitud}', '${longitud}', '${rumbo}', ${zarpe_id}, '${uid.uid(8)}')`,
+        function (err, result, field) {
+            if (err) return res.status(500).send({ message: err.message, code: 0 })
+            return res.status(200).json({message:'Se registro correctamente',code: 1, id: result.insertId})
+        }
+      );
     }
   )
 }
