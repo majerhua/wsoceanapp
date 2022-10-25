@@ -83,40 +83,62 @@ const deleteFotos = (req,res)=> {
 
 const processPhotos = (req,res) => {
   const {id} = req.query
-  con.query(
-    `SELECT * FROM lance_imagen WHERE id = ${id}`,
-    function (err, result, field) {
-      if (err) return res.status(500).send({ message: err.message, code: 0 })
-      const imageUrl = result[0].url
-      imageToBase64(imageUrl)
-      .then(
-          (response) => {
+  try{
+    con.query(
+      `SELECT * FROM lance_imagen WHERE id = ${id}`,
+      function (err, result, field) {
+        if (err) return res.status(500).send({ message: err.message, code: 0 })
+        const imageUrl = result[0].url
+        imageToBase64(imageUrl)
+        .then(
+            (response) => {
+  
+              const imgBase64 = `data:image/jpeg;base64,${response}`;
+  
+              axios.post('https://hf.space/embed/hexenbiest/OceanApp/+/api/predict', {
+                data: [
+                  "640",
+                  0.45,
+                  0.75,
+                  imgBase64
+                ]
+              })
+              .then(function (response) {
+                console.log(response.data.data[1].data);
+                const data = response.data.data[1].data;
 
-            const imgBase64 = `data:image/jpeg;base64,${response}`;
-
-            axios.post('https://hf.space/embed/hexenbiest/OceanApp/+/api/predict', {
-              data: [
-                "640",
-                0.45,
-                0.75,
-                imgBase64
-              ]
-            })
-            .then(function (response) {
-              return res.status(200).json(response.data.data[1].data)
-            })
-            .catch(function (error) {
-              console.log(error);
-            });
-          }
-      )
-      .catch(
-          (error) => {
-              console.log(error); // Logs an error if there was one
-          }
-      )
-    }
-  )
+                if(data.length > 1) {
+                  const lobosMarinos = data[0];
+                  const pelicanos = data[1];
+                  return res.status(200).json({
+                    loboMarinos: lobosMarinos[0],
+                    pelicanos: pelicanos[0]
+                  });
+                }else {
+                  return res.status(200).json({
+                    loboMarinos: 0,
+                    pelicanos: 0
+                  });
+                }
+              })
+              .catch(function (error) {
+                console.log(error);
+              });
+            }
+        )
+        .catch(
+            (error) => {
+                console.log(error); // Logs an error if there was one
+            }
+        )
+      }
+    );
+  }catch(ex){
+    return res.status(200).json({
+      loboMarinos: 0,
+      pelicanos: 0
+    });
+  }
 }
 
 module.exports = {
