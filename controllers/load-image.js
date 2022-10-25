@@ -2,6 +2,9 @@
 const AWS = require('aws-sdk');
 const con = require('../conexion/conexion');
 const uid =  require('uid');
+const imageToBase64 = require('image-to-base64');
+const axios = require('axios')
+
 
 const s3 = new AWS.S3({
   accessKeyId: process.env.AWS_S3_ACCESS_KEY_ID,
@@ -78,9 +81,48 @@ const deleteFotos = (req,res)=> {
   )
 }
 
+const processPhotos = (req,res) => {
+  const {id} = req.query
+  con.query(
+    `SELECT * FROM lance_imagen WHERE id = ${id}`,
+    function (err, result, field) {
+      if (err) return res.status(500).send({ message: err.message, code: 0 })
+      const imageUrl = result[0].url
+      imageToBase64(imageUrl)
+      .then(
+          (response) => {
+
+            const imgBase64 = `data:image/jpeg;base64,${response}`;
+
+            axios.post('https://hf.space/embed/hexenbiest/OceanApp/+/api/predict', {
+              data: [
+                "640",
+                0.45,
+                0.75,
+                imgBase64
+              ]
+            })
+            .then(function (response) {
+              return res.status(200).json(response.data.data[1].data)
+            })
+            .catch(function (error) {
+              console.log(error);
+            });
+          }
+      )
+      .catch(
+          (error) => {
+              console.log(error); // Logs an error if there was one
+          }
+      )
+    }
+  )
+}
+
 module.exports = {
   load,
   galeriaFotos,
   deleteFotos,
-  galeriaFotosAll
+  galeriaFotosAll,
+  processPhotos
 }
