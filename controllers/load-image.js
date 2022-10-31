@@ -86,6 +86,7 @@ const processPhotos = async(req,res) => {
   try{
     const {ids} = req.query
     const arrId = ids.split(',');
+    
     const arr = [];
 
     for(let i=0; i<arrId.length; i++) { 
