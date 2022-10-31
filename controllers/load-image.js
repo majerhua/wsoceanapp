@@ -81,64 +81,119 @@ const deleteFotos = (req,res)=> {
   )
 }
 
-const processPhotos = (req,res) => {
-  const {id} = req.query
-  try{
-    con.query(
-      `SELECT * FROM lance_imagen WHERE id = ${id}`,
-      function (err, result, field) {
-        if (err) return res.status(500).send({ message: err.message, code: 0 })
-        const imageUrl = result[0].url
-        imageToBase64(imageUrl)
-        .then(
-            (response) => {
-  
-              const imgBase64 = `data:image/jpeg;base64,${response}`;
-  
-              axios.post('https://hf.space/embed/hexenbiest/OceanApp/+/api/predict', {
-                data: [
-                  "640",
-                  0.45,
-                  0.75,
-                  imgBase64
-                ]
-              })
-              .then(function (response) {
-                console.log(response.data.data[1].data);
-                const data = response.data.data[1].data;
+const processPhotos = async(req,res) => {
+  const {ids} = req.query
+  const arrId = ids.split(',');
 
-                if(data.length > 1) {
-                  const lobosMarinos = data[0];
-                  const pelicanos = data[1];
-                  return res.status(200).json({
-                    loboMarinos: lobosMarinos[0],
-                    pelicanos: pelicanos[0]
-                  });
-                }else {
-                  return res.status(200).json({
-                    loboMarinos: 0,
-                    pelicanos: 0
-                  });
-                }
-              })
-              .catch(function (error) {
-                console.log(error);
-              });
-            }
-        )
-        .catch(
-            (error) => {
-                console.log(error); // Logs an error if there was one
-            }
-        )
+  try{
+
+    const arr = [];
+
+    for(let i=0; i<arrId.length; i++) { 
+      let obj =await queryProcessPhoto(arrId[i]);
+      arr.push(obj);
+      console.log(obj);
+    }
+
+    let arrNumLance = new Set();
+
+    for(let i=0; i<arr.length; i++) { 
+      arrNumLance.add(arr[i].numeroLance);
+    }
+
+    const arrResponse = [];
+
+    for(numLance of arrNumLance.values()) {
+      let arrEspecies = arr.filter(element => element.numeroLance === numLance);
+      let pelicanos = 0;
+      let lobosMarinos = 0;
+      
+      for(let i = 0; i < arrEspecies.length; i++) {
+        pelicanos += arrEspecies[i].pelicanos;
+        lobosMarinos += arrEspecies[i].loboMarinos;
       }
-    );
+
+      arrResponse.push({
+        numeroLance: numLance,
+        cantidadFotos: arrEspecies.length,
+        pelicanos,
+        lobosMarinos
+      })
+    }
+
+    return res.status(200).json(arrResponse);
   }catch(ex){
+    console.log(ex);
     return res.status(200).json({
       loboMarinos: 0,
       pelicanos: 0
     });
   }
+}
+
+const queryProcessPhoto = (id) => {
+  return new Promise((resolve, reject) => {
+    let numeroLance = 0;
+    con.query(
+      `SELECT l.numeroLance, li.url FROM lance_imagen li
+      INNER JOIN lance l ON l.id = li.lance_id
+      WHERE li.id = ${id}`,
+      function (err, result, field) {
+        if (err) return res.status(500).send({ message: err.message, code: 0 })
+        const imageUrl = result[0].url
+        numeroLance = parseInt(result[0].numeroLance)
+        imageToBase64(imageUrl)
+        .then(
+            (response) => {
+              const imgBase64 = `data:image/jpeg;base64,${response}`;
+              axios.post('https://hf.space/embed/hexenbiest/OceanApp/+/api/predict', {
+                data: [
+                  "640",
+                  0.5,
+                  0.5,
+                  imgBase64
+                ]
+              })
+              .then(function (response) {
+                const data = response.data.data[1].data;
+  
+                if(data.length > 1) {
+                  const lobosMarinos = data[0];
+                  const pelicanos = data[1];
+                  resolve({
+                    loboMarinos: lobosMarinos[0] ? parseInt(lobosMarinos[0]) : 0,
+                    pelicanos: pelicanos[0] ? parseInt(pelicanos[0]) : 0,
+                    numeroLance 
+                  });
+                }else {
+                  resolve({
+                    loboMarinos: 0,
+                    pelicanos: 0,
+                    numeroLance
+                  });
+                }
+              })
+              .catch(function (error) {
+                resolve({
+                    loboMarinos: 0,
+                    pelicanos: 0,
+                    numeroLance
+                });
+              });
+            }
+        )
+        .catch(
+            (error) => {
+              resolve({
+                loboMarinos: 0,
+                pelicanos: 0,
+                numeroLance
+            });
+            }
+        )
+      }
+    );
+  });
 }
 
 module.exports = {
