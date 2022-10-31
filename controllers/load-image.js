@@ -82,11 +82,11 @@ const deleteFotos = (req,res)=> {
 }
 
 const processPhotos = async(req,res) => {
-  const {ids} = req.query
-  const arrId = ids.split(',');
 
   try{
-
+    const {ids} = req.query
+    const arrId = ids.split(',');
+    
     const arr = [];
 
     for(let i=0; i<arrId.length; i++) { 
