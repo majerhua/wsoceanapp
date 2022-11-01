@@ -155,6 +155,7 @@ const queryProcessPhoto = (id) => {
               })
               .then(function (response) {
                 const data = response.data.data[1].data;
+                console.log(data);
   
                 if(data.length > 1) {
                   const lobosMarinos = data[0];
@@ -173,6 +174,7 @@ const queryProcessPhoto = (id) => {
                 }
               })
               .catch(function (error) {
+                console.log("error =>",error);
                 resolve({
                     loboMarinos: 0,
                     pelicanos: 0,
@@ -183,6 +185,7 @@ const queryProcessPhoto = (id) => {
         )
         .catch(
             (error) => {
+              console.log("error =>",error);
               resolve({
                 loboMarinos: 0,
                 pelicanos: 0,
