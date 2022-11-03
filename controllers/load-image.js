@@ -70,6 +70,23 @@ const galeriaFotosAll = (req,res)=> {
   )
 }
 
+const reportHistogram = (req,res)=> {
+  const {fechaInicio, fechaFin} = req.query;
+  con.query(
+    `SELECT  SUM(r.pelicanos) pelicanos, SUM(r.lobos_marinos) lobos_marinos, l.fechaLance FROM 
+    report r
+    INNER JOIN lance_imagen li ON li.id = r.lance_imagen_id
+    INNER JOIN lance l ON l.id = li.lance_id
+    WHERE 
+    l.fechaLance >= '${fechaInicio}' and l.fechaLance <= '${fechaFin}'
+    GROUP BY fechaLance;`,
+    function (err, result, field) {
+      if (err) return res.status(500).send({ message: err.message, code: 0 })
+      return res.status(200).json(result)
+    }
+  )
+}
+
 const deleteFotos = (req,res)=> {
   const {id} = req.query
   con.query(
@@ -77,6 +94,14 @@ const deleteFotos = (req,res)=> {
     function (err, result, field) {
       if (err) return res.status(500).send({ message: err.message, code: 0 })
       return res.status(200).json({message:'Se elimino correctamente',code: 1})
+    }
+  )
+}
+
+const insertReport = (pelicanos, lobosMarinos, lanceImagenId) => {
+  con.query(
+    `INSERT INTO report(pelicanos,lobos_marinos,lance_imagen_id) VALUES(${pelicanos},${lobosMarinos},${lanceImagenId})`,
+    function (err, result, field) {
     }
   )
 }
@@ -92,6 +117,7 @@ const processPhotos = async(req,res) => {
       let obj =await queryProcessPhoto(arrId[i]);
       arr.push(obj);
       console.log(obj);
+      insertReport(obj.pelicanos, obj.loboMarinos, obj.lanceImagenId);
     }
 
     let arrNumLance = new Set();
@@ -133,14 +159,16 @@ const processPhotos = async(req,res) => {
 const queryProcessPhoto = (id) => {
   return new Promise((resolve, reject) => {
     let numeroLance = 0;
+    let lanceImagenId = 0;
     con.query(
-      `SELECT l.numeroLance, li.url FROM lance_imagen li
+      `SELECT li.id ,l.numeroLance, li.url FROM lance_imagen li
       INNER JOIN lance l ON l.id = li.lance_id
       WHERE li.id = ${id}`,
       function (err, result, field) {
         if (err) return res.status(500).send({ message: err.message, code: 0 })
         const imageUrl = result[0].url
         numeroLance = parseInt(result[0].numeroLance)
+        lanceImagenId = parseInt(result[0].id)
         imageToBase64(imageUrl)
         .then(
             (response) => {
@@ -163,13 +191,15 @@ const queryProcessPhoto = (id) => {
                   resolve({
                     loboMarinos: lobosMarinos[0] ? parseInt(lobosMarinos[0]) : 0,
                     pelicanos: pelicanos[0] ? parseInt(pelicanos[0]) : 0,
-                    numeroLance 
+                    numeroLance,
+                    lanceImagenId
                   });
                 }else {
                   resolve({
                     loboMarinos: 0,
                     pelicanos: 0,
-                    numeroLance
+                    numeroLance,
+                    lanceImagenId
                   });
                 }
               })
@@ -178,7 +208,8 @@ const queryProcessPhoto = (id) => {
                 resolve({
                     loboMarinos: 0,
                     pelicanos: 0,
-                    numeroLance
+                    numeroLance,
+                    lanceImagenId
                 });
               });
             }
@@ -189,7 +220,8 @@ const queryProcessPhoto = (id) => {
               resolve({
                 loboMarinos: 0,
                 pelicanos: 0,
-                numeroLance
+                numeroLance,
+                lanceImagenId
             });
             }
         )
@@ -203,5 +235,6 @@ module.exports = {
   galeriaFotos,
   deleteFotos,
   galeriaFotosAll,
-  processPhotos
+  processPhotos,
+  reportHistogram
 }
