@@ -48,7 +48,8 @@ app.get('/api/galeria-fotos-all',upload,loadImageCtrl.galeriaFotosAll);
 app.post('/api/process-photos',loadImageCtrl.processPhotos);
 app.post('/api/histogram',loadImageCtrl.reportHistogram);
 app.post('/api/line-time',loadImageCtrl.reportLineTime);
+app.post('/api/especies-identificadas',loadImageCtrl.reportEspeciesIndificadas);
 
 app.listen(port, () => {
   console.log(`Api rest  en http://localhost:${port}`)
-})
+});
