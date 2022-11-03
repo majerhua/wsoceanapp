@@ -87,6 +87,22 @@ const reportHistogram = (req,res)=> {
   )
 }
 
+const reportLineTime = (req,res)=> {
+  con.query(
+    `SELECT  SUM(r.pelicanos) pelicanos, SUM(r.lobos_marinos) lobos_marinos,
+     DATE_FORMAT(l.fechaLance, "%d/%m/%Y")  fechaLance FROM 
+    report r
+    INNER JOIN lance_imagen li ON li.id = r.lance_imagen_id
+    INNER JOIN lance l ON l.id = li.lance_id
+    GROUP BY fechaLance`,
+    function (err, result, field) {
+      if (err) return res.status(500).send({ message: err.message, code: 0 })
+      return res.status(200).json(result)
+    }
+  )
+}
+
+
 const deleteFotos = (req,res)=> {
   const {id} = req.query
   con.query(
@@ -116,7 +132,6 @@ const processPhotos = async(req,res) => {
     for(let i=0; i<arrId.length; i++) { 
       let obj =await queryProcessPhoto(arrId[i]);
       arr.push(obj);
-      console.log(obj);
       insertReport(obj.pelicanos, obj.loboMarinos, obj.lanceImagenId);
     }
 
@@ -148,7 +163,6 @@ const processPhotos = async(req,res) => {
 
     return res.status(200).json(arrResponse);
   }catch(ex){
-    console.log(ex);
     return res.status(200).json({
       loboMarinos: 0,
       pelicanos: 0
@@ -183,7 +197,6 @@ const queryProcessPhoto = (id) => {
               })
               .then(function (response) {
                 const data = response.data.data[1].data;
-                console.log(data);
   
                 if(data.length > 1) {
                   const lobosMarinos = data[0];
@@ -204,7 +217,6 @@ const queryProcessPhoto = (id) => {
                 }
               })
               .catch(function (error) {
-                console.log("error =>",error);
                 resolve({
                     loboMarinos: 0,
                     pelicanos: 0,
@@ -216,7 +228,6 @@ const queryProcessPhoto = (id) => {
         )
         .catch(
             (error) => {
-              console.log("error =>",error);
               resolve({
                 loboMarinos: 0,
                 pelicanos: 0,
@@ -236,5 +247,6 @@ module.exports = {
   deleteFotos,
   galeriaFotosAll,
   processPhotos,
-  reportHistogram
+  reportHistogram,
+  reportLineTime
 }
