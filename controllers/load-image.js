@@ -87,7 +87,7 @@ const reportHistogram = (req,res)=> {
   )
 }
 
-const reportEspeciesIndificadas = () => {
+const reportEspeciesIndificadas = (req,res) => {
   con.query(
     `SELECT  
     e.nombre embarcacion,
