@@ -71,7 +71,7 @@ const galeriaFotosAll = (req,res)=> {
 }
 
 const reportHistogram = (req,res)=> {
-  const {fechaInicio, fechaFin} = req.query;
+  const {fechaInicio, fechaFin} = req.body;
   con.query(
     `SELECT  SUM(r.pelicanos) pelicanos, SUM(r.lobos_marinos) lobos_marinos, l.fechaLance FROM 
     report r
