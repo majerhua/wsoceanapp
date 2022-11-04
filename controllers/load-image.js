@@ -216,12 +216,20 @@ const queryProcessPhoto = (id) => {
                 ]
               })
               .then(function (response) {
-                //console.log(response.data.data);
                 const data = response.data.data[1].data;
   
                 if(data.length > 1) {
-                  const lobosMarinos = data[1];
-                  const pelicanos = data[0];
+                  let lobosMarinos;
+                  let pelicanos;
+                  if(data[0][1] == 'Lobo marino') {
+                    lobosMarinos = data[0];
+                    pelicanos = data[1];
+                  }else {
+                    lobosMarinos = data[1];
+                    pelicanos = data[0];
+                  }
+                  
+                  
                   resolve({
                     loboMarinos: lobosMarinos[0] ? parseInt(lobosMarinos[0]) : 0,
                     pelicanos: pelicanos[0] ? parseInt(pelicanos[0]) : 0,
