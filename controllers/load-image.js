@@ -220,8 +220,8 @@ const queryProcessPhoto = (id) => {
                 const data = response.data.data[1].data;
   
                 if(data.length > 1) {
-                  const lobosMarinos = data[0];
-                  const pelicanos = data[1];
+                  const lobosMarinos = data[1];
+                  const pelicanos = data[0];
                   resolve({
                     loboMarinos: lobosMarinos[0] ? parseInt(lobosMarinos[0]) : 0,
                     pelicanos: pelicanos[0] ? parseInt(pelicanos[0]) : 0,
