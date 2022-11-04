@@ -78,8 +78,7 @@ const reportHistogram = (req,res)=> {
     INNER JOIN lance_imagen li ON li.id = r.lance_imagen_id
     INNER JOIN lance l ON l.id = li.lance_id
     WHERE 
-    l.fechaLance >= '${fechaInicio}' and l.fechaLance <= '${fechaFin}'
-    GROUP BY fechaLance;`,
+    l.fechaLance >= '${fechaInicio}' and l.fechaLance <= '${fechaFin}'`,
     function (err, result, field) {
       if (err) return res.status(500).send({ message: err.message, code: 0 })
       return res.status(200).json(result)
@@ -217,6 +216,7 @@ const queryProcessPhoto = (id) => {
                 ]
               })
               .then(function (response) {
+                //console.log(response.data.data);
                 const data = response.data.data[1].data;
   
                 if(data.length > 1) {
