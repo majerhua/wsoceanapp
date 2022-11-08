@@ -109,12 +109,19 @@ const reportEspeciesIndificadas = (req,res) => {
 
 const reportLineTime = (req,res)=> {
   con.query(
-    `SELECT  SUM(r.pelicanos) pelicanos, SUM(r.lobos_marinos) lobos_marinos,
-     DATE_FORMAT(l.fechaLance, "%d/%m/%Y")  fechaLance FROM 
-    report r
-    INNER JOIN lance_imagen li ON li.id = r.lance_imagen_id
-    INNER JOIN lance l ON l.id = li.lance_id
-    GROUP BY fechaLance`,
+    `SELECT  
+    DATE_FORMAT(z.fechaZarpe, "%d/%m/%Y") fechaZarpe,
+        e.nombre embarcacion,
+        SUM(r.pelicanos) pelicanos, 
+        SUM(r.lobos_marinos) lobos_marinos, 
+        l.numeroLance numeroLance,
+        CONCAT(l.latitud,',',l.longitud,'-rumbo: ',l.rumbo) posicion
+        FROM report r
+        INNER JOIN lance_imagen li ON li.id = r.lance_imagen_id
+        INNER JOIN lance l ON l.id = li.lance_id
+        INNER JOIN zarpe z ON z.id = l.zarpe_id
+        INNER JOIn embarcacion e ON e.id = z.embarcacion_id
+        GROUP BY embarcacion,posicion,numeroLance`,
     function (err, result, field) {
       if (err) return res.status(500).send({ message: err.message, code: 0 })
       return res.status(200).json(result)
