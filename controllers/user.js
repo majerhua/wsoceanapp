@@ -1,7 +1,7 @@
 const con = require('../conexion/conexion')
 
 const validateUser = (req, res) => {
-  let { username, password } = req.query
+  let { username, password } = Object.entries(req.query).length > 0 ?  req.query : req.body;
   username = username.toLowerCase()
   password = password.toLowerCase()
   
