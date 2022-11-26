@@ -208,7 +208,7 @@ const queryProcessPhoto = (id) => {
         .then(
             (response) => {
               const imgBase64 = `data:image/jpeg;base64,${response}`;
-              axios.post('https://hf.space/embed/hexenbiest/OceanApp/+/api/predict', {
+              axios.post('https://hexenbiest-oceanapp.hf.space/api/predict', {
                 data: [
                   "640",
                   0.5,
