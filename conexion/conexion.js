@@ -1,9 +1,9 @@
 var mysql = require('mysql')
 var connection = mysql.createConnection({
-  host: 'r98du2bxwqkq3shg.cbetxkdyhwsb.us-east-1.rds.amazonaws.com',
-  user: 'ae7fordo9y1qf6vn',
-  password: 'jf8lrk89s4tii81q',
-  database: 'yto229sn9he1o0tl',
+  host: 'qz8si2yulh3i7gl3.cbetxkdyhwsb.us-east-1.rds.amazonaws.com	',
+  user: 'jkwi9b0o1fmrr7rx',
+  password: 'oro3mw3w807zh2wi',
+  database: 'y0yvug9qat08g8ax',
 })
 
 module.exports = connection
