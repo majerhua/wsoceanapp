@@ -22,7 +22,7 @@ const load = async (req, res) => {
 
   const resS3 = await s3.upload({
   Body: file.buffer,
-  Bucket: "oceanapp",
+  Bucket: "oceanapp2",
   Key: `${uid.uid(8)}.${typeImage}`,
   ContentType: file.mimetype
   })
